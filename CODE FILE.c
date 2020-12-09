@@ -11,15 +11,17 @@ void createaccount();
 void login();
 void mainmenu();
 void Employee();
-void AssignEmployee(char name[], char desg[], int id, int count);
+void AssignEmployee(char name[], char desg[], int id, int count,int salary);
 void display();
 void search(int empidno);
 void searchdel(int empidn);
+void searchsal(int salar);
 ///FUNCTION PROTOTYPE SECTION ENDS
 
 struct employeenode
 {
     int emplid;
+    int salary;
     char ename[MAX];
     char edesignation[MAX];
     struct employeenode* link;
@@ -88,7 +90,7 @@ void mainmenu()
 {
     printf("\nWhat would you like to do?\n\n");
     printf(">> %-35s [Press 1]\n","Manage Employees");
-    //printf(">> %-35s [Press 2]\n","Salary Management");
+    printf(">> %-35s [Press 2]\n","Salary Management");
     //printf(">> %-35s [Press 3]\n","Check Deposit and Loan Status");
     //printf(">> %-35s [Press 4]\n","Customer Management");
     //printf(">> %-35s [Press 5]\n","Accounts management");
@@ -99,9 +101,11 @@ void mainmenu()
 //==========================================================
 ///      THIS FUNCTION IS FOR EMPLOYEE MANAGEMENT
 //==========================================================
+
+int i;
 void Employee()
 {
-    int val1, val2, val3, val4, ID, i=1;
+    int val1, val2, val3, val4, ID, salary;
     char ename[MAX];
     char edesignation[MAX];
     printf("----------------------------------\n");//34
@@ -130,9 +134,11 @@ again:
             fgets(ename,50,stdin);
             printf("Enter Designation:\n>");
             fgets(edesignation,50,stdin);
-            printf("Enter ID:\n>");
+            printf("Enter Salary:\n>");
+            scanf("%d",&salary);
+            printf("Enter ID: [Example: 1001]\n>");
             scanf("%d",&ID);
-            AssignEmployee(ename,edesignation,ID,i);
+            AssignEmployee(ename,edesignation,ID,i,salary);
             i++;
             val2--;
             if(val2 >= 1)
@@ -149,14 +155,14 @@ again:
     }
     else if(val1 == 3)
     {
-        printf("Enter Employee ID\n");
+        printf("Enter Employee ID: [Example: 1001]\n");
         scanf("%d",&val3);
         search(val3);
         goto again2;
     }
     else if(val1 == 4)
     {
-        printf("Enter Employee ID to Remove\n");
+        printf("Enter Employee ID to Remove: [Example: 1001]\n");
         scanf("%d",&val4);
         searchdel(val4);
         goto again2;
@@ -171,15 +177,40 @@ again:
         goto again;
     }
 }
-
-//====================================
+void pre_defined_employee()
+{
+    i=1;
+    int ID1 = 1001,ID2 = 1002,ID3 = 1003,ID4 = 1004,ID5 = 1005;
+    int salary1 = 75000, salary2 = 65000, salary3 = 50000, salary4 = 40000,salary5 = 35000;
+    char ename1[]= "Md. Rahim Mia\n";
+    char ename2[]= "Md. Rahmatullah Alamin\n";
+    char ename3[]= "Ms. Salma Sakhawat\n";
+    char ename4[]= "Ms. Saima Akhter\n";
+    char ename5[]= "Raj Ballav Shen\n";
+    char edesignation1[]= "Assistant Branch Manager";
+    char edesignation2[]= "Branch Manager";
+    char edesignation3[]= "Assistant Officer";
+    char edesignation4[]= "Junior Officer";
+    char edesignation5[]= "ATM Specialist";
+    ///AssignEmployee(ename,edesignation,ID,i,salary);
+    AssignEmployee(ename1,edesignation1,ID1,i,salary1);
+    i++;
+    AssignEmployee(ename2,edesignation2,ID2,i,salary2);
+    i++;
+    AssignEmployee(ename3,edesignation3,ID3,i,salary3);
+    i++;
+    AssignEmployee(ename4,edesignation4,ID4,i,salary4);
+    i++;
+    AssignEmployee(ename5,edesignation5,ID5,i,salary5);
+    i++;
+}
 ///Assign Employee Function
-//====================================
-void AssignEmployee(char name[], char desg[], int id, int count)
+void AssignEmployee(char name[], char desg[], int id, int count,int sal)
 {
     int i;
     struct employeenode* temp1 = (struct employeenode*)malloc(sizeof(struct employeenode));
     temp1 -> emplid = id;
+    temp1 -> salary = sal;
     strcpy(temp1 -> ename,name);
     strcpy(temp1 -> edesignation,desg);
     temp1 -> link = NULL;
@@ -205,21 +236,20 @@ void AssignEmployee(char name[], char desg[], int id, int count)
 void display()
 {
     struct employeenode* newnode = emplinklist;
-    printf("\n\nEmployee Details List: \n");
+    printf("\n\nEmployee Details List: \n\n");
     while(newnode != NULL)
     {
         printf("ID : %d\n",newnode -> emplid);
         printf("Name: %s",newnode -> ename);
         printf("Designation: %s\n",newnode -> edesignation);
+        printf("Salary : %d/-\n",newnode -> salary);
         printf("---------------------------------------\n");
         newnode = newnode->link;
     }
     printf("\n\n");
 }
 
-/*=====================================*/
 ///Search and delete Function
-/*=====================================*/
 void search(int empidno)
 {
     struct employeenode* newnode = emplinklist;
@@ -231,12 +261,13 @@ void search(int empidno)
             printf("ID : %d\n",newnode -> emplid);
             printf("Name: %s",newnode -> ename);
             printf("Designation: %s",newnode -> edesignation);
+            printf("Salary : %d\n",newnode -> salary);
             return;
         }
         else
             newnode = newnode->link;
     }
-    printf("\n Employee Number %d not found !\n", empidno);
+    printf("\nEmployee Number %d not found !\n", empidno);
 }
 
 void searchdel(int empidn)
@@ -279,6 +310,65 @@ void searchdel(int empidn)
 ///       EMPLOYEE MANAGEMENT SYSTEM ENDS
 //==========================================================
 
+//==========================================================
+///       THIS FUNCTION IS FOR SALARY MANAGEMENT
+//==========================================================
+void Salary_management()
+{
+    int val1,val2;
+    printf("----------------------------------\n");//34
+    printf("|        SALARY MANAGEMENT        |\n");
+    printf("----------------------------------\n\n");
+again2:
+    printf(">> %-35s [Press 1]\n","View all employee's salary");
+    printf(">> %-35s [Press 2]\n","Change Salary");
+    scanf("%d",&val1);
+    if(val1 == 1)
+    {
+        display();
+        goto again2;
+    }
+    else if(val1 == 2)
+    {
+        printf("Enter Employee ID: [Example: 1001]\n");
+        scanf("%d",&val2);
+        searchsal(val2);
+        goto again2;
+    }
+    else
+    {
+        printf("INVALID INPUT !\n");
+        goto again2;
+    }
+
+}
+
+void searchsal(int salar)
+{
+    int newsal;
+    struct employeenode* newnode = emplinklist;
+    while(newnode != NULL)
+    {
+        if (newnode -> emplid == salar)
+        {
+            printf("\nEMPLOYEE FOUND! \n\n");
+            printf("Current Salary : %d/-\n",newnode -> salary);
+            printf("Change to: ");
+            scanf("%d",&newsal);
+            newnode -> salary = newsal;
+            printf("Change Successful !");
+            printf("Changed Salary : %d/-\n",newnode -> salary);
+            return;
+        }
+        else
+            newnode = newnode->link;
+    }
+    printf("\nEmployee Number %d not found !\n\n", salar);
+}
+//==========================================================
+///       SALARY MANAGEMENT SYSTEM ENDS
+//==========================================================
+
 
 ///THE MAIN FUNCTION
 int main()
@@ -307,6 +397,7 @@ login1:
         goto login1;
     }
 
+pre_defined_employee();
 main1:
     mainmenu();
 take1:
@@ -316,10 +407,10 @@ take1:
     case 1:
         Employee();
         break;
-    /*case 2:
-        Salary();
+    case 2:
+        Salary_management();
         break;
-    case 3:
+    /*case 3:
         DepositAndLoan();
         break;
     case 4:
