@@ -44,6 +44,7 @@ void createaccount()
     fgets(password,MAX,stdin);
 
     printf("\n\n----------------------------------\n");
+    printf("Hi,\n");
     while (fullname[i])
     {
         chr = fullname[i];
@@ -57,14 +58,16 @@ void login()
 {
     int i=0;
     char chr,username1[MAX],password1[MAX];
-    again:
+again:
     printf("Enter Username:\n");
+    getchar();
     fgets(username1,MAX,stdin);
     printf("Enter Password:\n");
     fgets(password1,MAX,stdin);
-    if(username1 == username && password1 == password)
+    if(strcmp(username1,username) == 0 && strcmp(password1,password) == 0)
     {
         printf("\n\n----------------------------------\n");
+        printf("Hi,\n");
         while (fullname[i])
         {
             chr = fullname[i];
@@ -75,7 +78,7 @@ void login()
     }
     else
     {
-        printf("Wrong Login Info!\nTry Again.\n");
+        printf("\nWrong Login Info!\nTry Again.\n\n");
         goto again;
     }
 }
@@ -90,6 +93,7 @@ void mainmenu()
     //printf(">> %-35s [Press 4]\n","Customer Management");
     //printf(">> %-35s [Press 5]\n","Accounts management");
     printf(">> %-35s [Press 6]\n","Logout");
+    printf(">> %-35s [Press 7]\n","Exit");
 }
 
 //==========================================================
@@ -271,58 +275,70 @@ void searchdel(int empidn)
     }
     printf("\nEmployee not found\n");
 }
+//==========================================================
+///       EMPLOYEE MANAGEMENT SYSTEM ENDS
+//==========================================================
+
 
 ///THE MAIN FUNCTION
 int main()
 {
     emplinklist = NULL;
     int val1,val2;
-
     printf("-----------------------------------\n");
-    printf("|         WELCOME TO SCASH         |\n");
+    printf("|         WELCOME TO SBANK         |\n");
     printf("-----------------------------------\n\n");
-login:
-    printf(">> To Create Account [Press 1]\n");
-    printf(">> Or Login [Press 2]\n");
+login1:
+    printf("New Here?\n>> Create Account [Press 1]\n");
+    printf("or\n>> Login          [Press 2]\n");
+
     scanf("%d",&val1);
     if(val1 == 1)
     {
         createaccount();
-main1:
-        mainmenu();
-take1:
-        scanf("%d",&val2);
-        switch (val2)
-        {
-        case 1:
-            Employee();
-            break;
-        /*case 2:
-            Salary();
-            break;
-        case 3:
-            DepositAndLoan();
-            break;
-        case 4:
-            Customer();
-            break;
-        case 5:
-            Accounts();
-            break;*/
-        case 6:
-            goto login;
-            break;
-        default:
-        {
-            printf("Wrong Input !!\n");
-            goto take1;
-        }
-        }
-        goto main1;
-
     }
     else if(val1 == 2)
     {
-        goto main1;
+        login();
     }
+    else
+    {
+        printf("INVALID INPUT !\n");
+        goto login1;
+    }
+
+main1:
+    mainmenu();
+take1:
+    scanf("%d",&val2);
+    switch (val2)
+    {
+    case 1:
+        Employee();
+        break;
+    /*case 2:
+        Salary();
+        break;
+    case 3:
+        DepositAndLoan();
+        break;
+    case 4:
+        Customer();
+        break;
+    case 5:
+        Accounts();
+        break;*/
+    case 6:
+        goto login1;
+        break;
+    case 7:
+        return 0;
+        break;
+    default:
+    {
+        printf("Wrong Input !!\n");
+        goto take1;
+    }
+    }
+    goto main1;
 }
