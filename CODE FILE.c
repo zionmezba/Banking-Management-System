@@ -6,6 +6,17 @@
 #include<time.h>
 #define MAX 50
 
+///FUNCTION PROTOTYPE SECTION
+void createaccount();
+void login();
+void mainmenu();
+void Employee();
+void AssignEmployee(char name[], char desg[], int id, int count);
+void display();
+void search(int empidno);
+void searchdel(int empidn);
+///FUNCTION PROTOTYPE SECTION ENDS
+
 struct employeenode
 {
     int emplid;
@@ -15,66 +26,22 @@ struct employeenode
 };
 struct employeenode* emplinklist;
 
-//====================================
-///Assign Employee Function
-//====================================
-void AssignEmployee(char name[], char desg[], int id, int count)
-{
-    int i;
-    struct employeenode* temp1 = (struct employeenode*)malloc(sizeof(struct employeenode));
-    temp1 -> emplid = id;
-    strcpy(temp1 -> ename,name);
-    strcpy(temp1 -> edesignation,desg);
-    temp1 -> link = NULL;
-    //Create link
-    if(count == 1)
-    {
-        temp1 -> link = emplinklist;
-        emplinklist = temp1;
-    }
-    else
-    {
-        struct employeenode* temp2 = emplinklist;
-        for(i=0; i<count-2; i++)
-        {
-            temp2 = temp2 -> link;
-        }
-        temp1 -> link=temp2->link;
-        temp2-> link= temp1;
-    }
-}
 
-///DISPLAY LIST
-void display()
-{
-    struct employeenode* newnode = emplinklist;
-    printf("\n\nEmployee Details List: \n");
-    while(newnode != NULL)
-    {
-        printf("ID : %d\n",newnode -> emplid);
-        printf("Name: %s",newnode -> ename);
-        printf("Designation: %s\n",newnode -> edesignation);
-        printf("---------------------------------------\n");
-        newnode = newnode->link;
-    }
-    printf("\n\n");
-}
-
-//Create Account For Login
+///Create Account and Login Function
+char username[MAX];
+char password[MAX];
+char fullname[MAX];
 void createaccount()
 {
     int i=0;
     char chr;
-    char username[20];
-    char password[30];
-    char fullname[40];
     printf("\nEnter Your Full Name:\n");
     getchar();
-    fgets(fullname,40,stdin);
-    printf("Enter Username: [Max 20 character]\n");
-    fgets(username,20,stdin);
-    printf("Enter Password: [Max 30 character]\n");
-    fgets(password,30,stdin);
+    fgets(fullname,MAX,stdin);
+    printf("Enter Username: [Max 50 character]\n");
+    fgets(username,MAX,stdin);
+    printf("Enter Password: [Max 50 character]\n");
+    fgets(password,MAX,stdin);
 
     printf("\n\n----------------------------------\n");
     while (fullname[i])
@@ -86,64 +53,34 @@ void createaccount()
     printf("----------------------------------\n\n");
 }
 
-//Search Employee
-void search(int empidno)
-{
-    struct employeenode* newnode = emplinklist;
-    while(newnode != NULL)
-    {
-        if (newnode -> emplid == empidno)
-        {
-            printf("\nEMPLOYEE FOUND! \n\n");
-            printf("ID : %d\n",newnode -> emplid);
-            printf("Name: %s",newnode -> ename);
-            printf("Designation: %s",newnode -> edesignation);
-            return;
-        }
-        else
-            newnode = newnode->link;
-    }
-    printf("\n Employee Number %d not found !\n", empidno);
-}
-
-void searchdel(int empidn)
+void login()
 {
     int i=0;
-    struct employeenode* newnode = emplinklist;
-    while(newnode != NULL)
+    char chr,username1[MAX],password1[MAX];
+    again:
+    printf("Enter Username:\n");
+    fgets(username1,MAX,stdin);
+    printf("Enter Password:\n");
+    fgets(password1,MAX,stdin);
+    if(username1 == username && password1 == password)
     {
-        if (newnode -> emplid == empidn)
+        printf("\n\n----------------------------------\n");
+        while (fullname[i])
         {
-            ++i;
-            printf("\nEMPLOYEE REMOVED! \n\n");
-            struct employeenode* newnode1 = emplinklist;
-            if(i == 1)
-            {
-                emplinklist = newnode1 -> link;
-                free(newnode1);
-                return;
-            }
-
-            int j;
-            for(j=0; j<i-2; j++)
-            {
-                newnode1 = newnode1 -> link;
-            }
-            struct employeenode* temp2 = newnode1 -> link;
-            newnode1 -> link = temp2 -> link;
-            free(temp2);
-            return;
-        }
-        else
-        {
-            newnode = newnode -> link;
+            chr = fullname[i];
+            printf("%c", toupper(chr));
             i++;
         }
+        printf("----------------------------------\n\n");
     }
-    printf("\n Employee not found\n", empidn);
+    else
+    {
+        printf("Wrong Login Info!\nTry Again.\n");
+        goto again;
+    }
 }
 
-/*Main Menu*/
+///MENU
 void mainmenu()
 {
     printf("\nWhat would you like to do?\n\n");
@@ -156,9 +93,9 @@ void mainmenu()
 }
 
 //==========================================================
-//      THIS FUNCTION IS FOR EMPLOYEE MANAGEMENT
+///      THIS FUNCTION IS FOR EMPLOYEE MANAGEMENT
 //==========================================================
-int Employee()
+void Employee()
 {
     int val1, val2, val3, val4, ID, i=1;
     char ename[MAX];
@@ -230,6 +167,111 @@ again:
         goto again;
     }
 }
+
+//====================================
+///Assign Employee Function
+//====================================
+void AssignEmployee(char name[], char desg[], int id, int count)
+{
+    int i;
+    struct employeenode* temp1 = (struct employeenode*)malloc(sizeof(struct employeenode));
+    temp1 -> emplid = id;
+    strcpy(temp1 -> ename,name);
+    strcpy(temp1 -> edesignation,desg);
+    temp1 -> link = NULL;
+    //Create link
+    if(count == 1)
+    {
+        temp1 -> link = emplinklist;
+        emplinklist = temp1;
+    }
+    else
+    {
+        struct employeenode* temp2 = emplinklist;
+        for(i=0; i<count-2; i++)
+        {
+            temp2 = temp2 -> link;
+        }
+        temp1 -> link=temp2->link;
+        temp2-> link= temp1;
+    }
+}
+
+///DISPLAY LIST
+void display()
+{
+    struct employeenode* newnode = emplinklist;
+    printf("\n\nEmployee Details List: \n");
+    while(newnode != NULL)
+    {
+        printf("ID : %d\n",newnode -> emplid);
+        printf("Name: %s",newnode -> ename);
+        printf("Designation: %s\n",newnode -> edesignation);
+        printf("---------------------------------------\n");
+        newnode = newnode->link;
+    }
+    printf("\n\n");
+}
+
+/*=====================================*/
+///Search and delete Function
+/*=====================================*/
+void search(int empidno)
+{
+    struct employeenode* newnode = emplinklist;
+    while(newnode != NULL)
+    {
+        if (newnode -> emplid == empidno)
+        {
+            printf("\nEMPLOYEE FOUND! \n\n");
+            printf("ID : %d\n",newnode -> emplid);
+            printf("Name: %s",newnode -> ename);
+            printf("Designation: %s",newnode -> edesignation);
+            return;
+        }
+        else
+            newnode = newnode->link;
+    }
+    printf("\n Employee Number %d not found !\n", empidno);
+}
+
+void searchdel(int empidn)
+{
+    int i=0;
+    struct employeenode* newnode = emplinklist;
+    while(newnode != NULL)
+    {
+        if (newnode -> emplid == empidn)
+        {
+            ++i;
+            printf("\nEMPLOYEE REMOVED! \n\n");
+            struct employeenode* newnode1 = emplinklist;
+            if(i == 1)
+            {
+                emplinklist = newnode1 -> link;
+                free(newnode1);
+                return;
+            }
+
+            int j;
+            for(j=0; j<i-2; j++)
+            {
+                newnode1 = newnode1 -> link;
+            }
+            struct employeenode* temp2 = newnode1 -> link;
+            newnode1 -> link = temp2 -> link;
+            free(temp2);
+            return;
+        }
+        else
+        {
+            newnode = newnode -> link;
+            i++;
+        }
+    }
+    printf("\nEmployee not found\n");
+}
+
 ///THE MAIN FUNCTION
 int main()
 {
@@ -239,7 +281,7 @@ int main()
     printf("-----------------------------------\n");
     printf("|         WELCOME TO SCASH         |\n");
     printf("-----------------------------------\n\n");
-    login:
+login:
     printf(">> To Create Account [Press 1]\n");
     printf(">> Or Login [Press 2]\n");
     scanf("%d",&val1);
