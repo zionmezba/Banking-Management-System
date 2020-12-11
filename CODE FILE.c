@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include<time.h>
 #define MAX 50
+#define size 50
 
 ///FUNCTION PROTOTYPE SECTION
 void createaccount();
@@ -91,11 +92,9 @@ void mainmenu()
     printf("\nWhat would you like to do?\n\n");
     printf(">> %-35s [Press 1]\n","Manage Employees");
     printf(">> %-35s [Press 2]\n","Salary Management");
-    //printf(">> %-35s [Press 3]\n","Check Deposit and Loan Status");
-    //printf(">> %-35s [Press 4]\n","Customer Management");
-    //printf(">> %-35s [Press 5]\n","Accounts management");
-    printf(">> %-35s [Press 6]\n","Logout");
-    printf(">> %-35s [Press 7]\n","Exit");
+    printf(">> %-35s [Press 3]\n","Customer Management");
+    printf(">> %-35s [Press 4]\n","Logout");
+    printf(">> %-35s [Press 5]\n","Exit");
 }
 
 //==========================================================
@@ -322,6 +321,7 @@ void Salary_management()
 again2:
     printf(">> %-35s [Press 1]\n","View all employee's salary");
     printf(">> %-35s [Press 2]\n","Change Salary");
+    printf(">> %-35s [Press 3]\n","Go to Main Menu");
     scanf("%d",&val1);
     if(val1 == 1)
     {
@@ -334,6 +334,10 @@ again2:
         scanf("%d",&val2);
         searchsal(val2);
         goto again2;
+    }
+    else if(val1 == 2)
+    {
+        return;
     }
     else
     {
@@ -369,6 +373,224 @@ void searchsal(int salar)
 ///       SALARY MANAGEMENT SYSTEM ENDS
 //==========================================================
 
+//==========================================================
+///       THIS FUNCTION IS FOR CUSTOMER MANAGEMENT
+//==========================================================
+struct node
+{
+    int data; ///Account number
+    int contact;
+    int balance;
+    char name[size];
+    char address[size];
+    struct node *right_child;
+    struct node *left_child;
+};
+
+//function to create a node
+struct node* find_minimum(struct node *root)
+{
+    if(root == NULL)
+        return NULL;
+    else if(root->left_child != NULL) // node with minimum value will have no left child
+        return find_minimum(root->left_child); // left most element will be minimum
+    return root;
+}
+struct node* new_node(int x, int cont, int balc, char nam[],char add[])
+{
+    struct node *p;
+    p = malloc(sizeof(struct node));
+    p -> data = x;
+    p -> contact = cont;
+    p -> balance = balc;
+    strcpy(p -> name,nam);
+    strcpy(p -> address,add);
+    p->left_child = NULL;
+    p->right_child = NULL;
+
+    return p;
+}
+
+struct node* insert(struct node *root, int x, int cont, int balc, char nam[],char add[])
+{
+
+    if(root==NULL)
+    {
+        return new_node(x,cont,balc,nam,add);
+    }
+    else if(x>root->data)
+    {
+        root->right_child = insert(root->right_child, x,cont,balc,nam,add);
+    }
+    else
+    {
+        root->left_child = insert(root->left_child,x,cont,balc,nam,add);
+    }
+    return root;
+}
+
+void pre_defined_customers(struct node *root)
+{
+
+    int acc1 = 3031,acc2 = 3032,acc3 = 3033,acc4 = 3034,acc5 = 3035;
+    int cnt1 = 1750458479, cnt2 = 1957886496, cnt3 = 1774383469;
+    int cnt4 = 1303034996, cnt5 = 1854795479;
+    int balc1 = 150650, balc2 = 256100, balc3 = 500050, balc4 = 1000200, balc5 = 982002;
+    char cname1[]= "Md. Rustom Chowdhuri\n";
+    char cname2[]= "Md. Bodrul Alamin\n";
+    char cname3[]= "Ms. Hasina Begum\n";
+    char cname4[]= "Ms. Bilimoria\n";
+    char cname5[]= "Sourav Pal\n";
+    char addr1[]= "Keranipara, Rangpur";
+    char addr2[]= "Uttara, Dhaka";
+    char addr3[]= "Banani, Dhaka";
+    char addr4[]= "Taraganj, Rangpur";
+    char addr5[]= "Guptapara, Sylhet";
+
+    ///AssignNode(ename,edesignation,ID,i,salary);
+    insert(root,acc1,cnt1,balc1,cname1,addr1);
+    insert(root,acc2,cnt2,balc2,cname2,addr2);
+    insert(root,acc3,cnt3,balc3,cname3,addr3);
+    insert(root,acc4,cnt4,balc4,cname4,addr4);
+    insert(root,acc5,cnt5,balc5,cname5,addr5);
+
+}
+//Search Function
+struct node* searchtree(struct node *root, int x)
+{
+    if(root==NULL || root->data==x)
+    {
+        printf("----------------------------------\n\n");
+        printf("\nAccount Number       :%d\n",root-> data);
+        printf("Name                 :%s",root -> name);
+        printf("Address              :%s\n",root -> address);
+        printf("Contact Number       :%d\n",root -> contact);
+        printf("Balance              :%d/-\n",root -> balance);
+        printf("----------------------------------\n\n");
+        return 0;
+    }
+    else if(x>root->data)
+    {
+        searchtree(root->right_child, x);
+    }
+    else if(x <= root->data)
+    {
+        searchtree(root->left_child,x);
+    }
+    else
+    {
+        printf("Not Found !\n\n");
+    }
+    return 0;
+}
+// funnction to delete a node
+struct node* delete(struct node *root, int x)
+{
+
+    if(root==NULL)
+        return NULL;
+    if (x>root->data)
+        root->right_child = delete(root->right_child, x);
+    else if(x<root->data)
+        root->left_child = delete(root->left_child, x);
+    else
+    {
+        if(root->left_child==NULL && root->right_child==NULL)
+        {
+            free(root);
+            return NULL;
+        }
+
+        else if(root->left_child==NULL || root->right_child==NULL)
+        {
+            struct node *temp;
+            if(root->left_child==NULL)
+                temp = root->right_child;
+            else
+                temp = root->left_child;
+            free(root);
+            return temp;
+        }
+        else
+        {
+            struct node *temp = find_minimum(root->right_child);
+            root->data = temp->data;
+            root->right_child = delete(root->right_child, temp->data);
+        }
+    }
+    return root;
+}
+
+
+
+void inorder(struct node *root)
+{
+    if(root!=NULL)
+    {
+        inorder(root->left_child);
+        printf("\nAccount Number       :%d\n",root-> data);
+        printf("Name                 :%s",root -> name);
+        printf("Address              :%s\n",root -> address);
+        printf("Contact Number       :%d\n",root -> contact);
+        printf("Balance              :%d/-\n",root -> balance);
+        printf("----------------------------------\n\n");
+        inorder(root->right_child);
+    }
+}
+
+void Customer()
+{
+    int val1,val2,val3;
+    printf("----------------------------------\n");//34
+    printf("|      CUSTOMER MANAGEMENT       |\n");
+    printf("----------------------------------\n\n");
+    struct node *root;
+    root = new_node(3036,176354,602305,"Md. Rashed Mia\n","Munshipara,Rangpur");
+    pre_defined_customers(root);
+again3:
+    printf(">> %-35s [Press 1]\n","View all Customerrs Info");
+    printf(">> %-35s [Press 2]\n","Search Customers");
+    printf(">> %-35s [Press 3]\n","Remove Customers");
+    printf(">> %-35s [Press 4]\n","Go to Main Menu");
+
+    scanf("%d",&val1);
+    if(val1 == 1)
+    {
+        inorder(root);
+        goto again3;
+    }
+    else if(val1 == 2)
+    {
+        printf("Enter Customer Account No: [Example: 3034]\n");
+        scanf("%d",&val2);
+        searchtree(root,val2);
+        goto again3;
+    }
+    else if(val1 == 3)
+    {
+        printf("Enter Customer Account No: [Example: 3034]\n");
+        scanf("%d",&val3);
+        delete(root,val3);
+        printf("Delete Successful !\n\n");
+        goto again3;
+    }
+    else if(val1 == 4)
+    {
+        return;
+    }
+    else
+    {
+        printf("INVALID INPUT !\n\n");
+        goto again3;
+    }
+    printf("\n");
+}
+
+
+//==========================================================
+///       CUSTOMER MANAGEMENT SYSTEM ENDS
+//==========================================================
+
 
 ///THE MAIN FUNCTION
 int main()
@@ -379,8 +601,8 @@ int main()
     printf("|         WELCOME TO SBANK         |\n");
     printf("-----------------------------------\n\n");
 login1:
-    printf("New Here?\n>> Create Account [Press 1]\n");
-    printf("or\n>> Login          [Press 2]\n");
+    printf("New Here?\n>> Create Account [Press 1], or\n");
+    printf(">> Login          [Press 2]\n");
 
     scanf("%d",&val1);
     if(val1 == 1)
@@ -397,7 +619,7 @@ login1:
         goto login1;
     }
 
-pre_defined_employee();
+    pre_defined_employee();
 main1:
     mainmenu();
 take1:
@@ -410,19 +632,13 @@ take1:
     case 2:
         Salary_management();
         break;
-    /*case 3:
-        DepositAndLoan();
-        break;
-    case 4:
+    case 3:
         Customer();
         break;
-    case 5:
-        Accounts();
-        break;*/
-    case 6:
+    case 4:
         goto login1;
         break;
-    case 7:
+    case 5:
         return 0;
         break;
     default:
