@@ -34,6 +34,7 @@ struct employeenode* emplinklist;
 char username[MAX];
 char password[MAX];
 char fullname[MAX];
+
 void createaccount()
 {
     int i=0;
@@ -335,7 +336,7 @@ again2:
         searchsal(val2);
         goto again2;
     }
-    else if(val1 == 2)
+    else if(val1 == 3)
     {
         return;
     }
@@ -453,7 +454,6 @@ void pre_defined_customers(struct node *root)
     insert(root,acc3,cnt3,balc3,cname3,addr3);
     insert(root,acc4,cnt4,balc4,cname4,addr4);
     insert(root,acc5,cnt5,balc5,cname5,addr5);
-
 }
 //Search Function
 struct node* searchtree(struct node *root, int x)
@@ -540,7 +540,8 @@ void inorder(struct node *root)
 
 void Customer()
 {
-    int val1,val2,val3;
+    int val1,val2,val3,val4,val5,val6;
+    char namee[size],addre[size];
     printf("----------------------------------\n");//34
     printf("|      CUSTOMER MANAGEMENT       |\n");
     printf("----------------------------------\n\n");
@@ -548,10 +549,11 @@ void Customer()
     root = new_node(3036,176354,602305,"Md. Rashed Mia\n","Munshipara,Rangpur");
     pre_defined_customers(root);
 again3:
-    printf(">> %-35s [Press 1]\n","View all Customerrs Info");
-    printf(">> %-35s [Press 2]\n","Search Customers");
-    printf(">> %-35s [Press 3]\n","Remove Customers");
-    printf(">> %-35s [Press 4]\n","Go to Main Menu");
+    printf(">> %-35s [Press 1]\n","View all Customers Info");
+    printf(">> %-35s [Press 2]\n","Add New Customers");
+    printf(">> %-35s [Press 3]\n","Search Customers");
+    printf(">> %-35s [Press 4]\n","Remove Customers");
+    printf(">> %-35s [Press 5]\n","Go to Main Menu");
 
     scanf("%d",&val1);
     if(val1 == 1)
@@ -561,12 +563,29 @@ again3:
     }
     else if(val1 == 2)
     {
+        printf("Account No    : [Example: 3034]\n");
+        scanf("%d",&val4);
+        printf("Name          : \n");
+        getchar();
+        fgets(namee,size,stdin);
+        printf("Address       : \n");
+        fgets(addre,size,stdin);
+        printf("Contact Number: \n");
+        scanf("%d",&val5);
+        printf("Balance       : \n");
+        scanf("%d",&val6);
+        ///struct node *root, int x, int cont, int balc, char nam[],char add[]
+        insert(root,val4,val5,val6,namee,addre);
+        goto again3;
+    }
+    else if(val1 == 3)
+    {
         printf("Enter Customer Account No: [Example: 3034]\n");
         scanf("%d",&val2);
         searchtree(root,val2);
         goto again3;
     }
-    else if(val1 == 3)
+    else if(val1 == 4)
     {
         printf("Enter Customer Account No: [Example: 3034]\n");
         scanf("%d",&val3);
@@ -574,7 +593,7 @@ again3:
         printf("Delete Successful !\n\n");
         goto again3;
     }
-    else if(val1 == 4)
+    else if(val1 == 5)
     {
         return;
     }
@@ -585,8 +604,6 @@ again3:
     }
     printf("\n");
 }
-
-
 //==========================================================
 ///       CUSTOMER MANAGEMENT SYSTEM ENDS
 //==========================================================
