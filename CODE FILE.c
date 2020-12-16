@@ -379,7 +379,7 @@ void searchsal(int salar)
 //==========================================================
 struct node
 {
-    int data; ///Account number
+    int data; ///We will use as Account number
     int contact;
     int balance;
     char name[size];
@@ -388,13 +388,13 @@ struct node
     struct node *left_child;
 };
 
-//function to create a node
+
 struct node* find_minimum(struct node *root)
 {
     if(root == NULL)
         return NULL;
-    else if(root->left_child != NULL) // node with minimum value will have no left child
-        return find_minimum(root->left_child); // left most element will be minimum
+    else if(root->left_child != NULL) 
+        return find_minimum(root->left_child); 
     return root;
 }
 struct node* new_node(int x, int cont, int balc, char nam[],char add[])
@@ -483,7 +483,7 @@ struct node* searchtree(struct node *root, int x)
     }
     return 0;
 }
-// funnction to delete a node
+//This function is for delete
 struct node* delete(struct node *root, int x)
 {
 
